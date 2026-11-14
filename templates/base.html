@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Veterinaria - Gestión</title>
+</head>
+<body>
+    {% with mensajes = get_flashed_messages() %}
+      {% if mensajes %}
+        <ul>
+        {% for m in mensajes %}
+          <li><strong>{{ m }}</strong></li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block contenido %}{% endblock %}
+    </main>
+</body>
+</html>
