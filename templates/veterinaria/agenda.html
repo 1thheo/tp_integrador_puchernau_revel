@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Agenda Diaria del Veterinario</h2>
+
+<form action="{{ url_for('veterinaria.agenda_dia') }}" method="GET">
+    <label>Fecha:</label>
+    <input type="date" name="fecha" value="{{ fecha_filtro }}">
+    
+    <label>Estado:</label>
+    <select name="estado">
+        <option value="todos" {% if estado_filtro == 'todos' %}selected{% endif %}>Todos</option>
+        <option value="pendiente" {% if estado_filtro == 'pendiente' %}selected{% endif %}>Pendientes</option>
+        <option value="finalizado" {% if estado_filtro == 'finalizado' %}selected{% endif %}>Finalizados</option>
+    </select>
+    <button type="submit">Filtrar</button>
+</form>
+<hr>
+
+{% if turnos %}
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Mascota</th>
+                <th>Dueno</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for t in turnos %}
+            <tr>
+                <td><strong>{{ t.hora }}</strong></td>
+                <td>{{ t.mascota.nombre }} ({{ t.mascota.especie }})</td>
+                <td>{{ t.mascota.dueno.usuario.nombre }} {{ t.mascota.dueno.usuario.apellido }}</td>
+                <td>{{ t.motivo }}</td>
+                <td>{{ t.estado }}</td>
+                <td>
+                    <a href="{{ url_for('veterinaria.ver_historial', id_mascota=t.id_mascota) }}">Ver Historial</a>
+                    {% if t.estado == 'pendiente' %}
+                        | <a href="{{ url_for('veterinaria.registrar_consulta', id_turno=t.id_turno) }}">Atender Consulta</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay turnos registrados para los filtros seleccionados.</p>
+{% endif %}
+{% endblock %}
