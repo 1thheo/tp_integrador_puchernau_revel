@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Registrar Nueva Mascota</h2>
+<form action="{{ url_for('clientes.registrar_mascota') }}" method="POST">
+    <div><label>Nombre de la Mascota:</label><br><input type="text" name="nombre" required></div><br>
+    <div>
+        <label>Especie:</label><br>
+        <select name="especie" required>
+            <option value="">Seleccionar...</option>
+            <option value="Perro">Perro</option>
+            <option value="Gato">Gato</option>
+            <option value="Ave">Ave</option>
+            <option value="Otro">Otro</option>
+        </select>
+    </div><br>
+    <div><label>Raza:</label><br><input type="text" name="raza" required></div><br>
+    <div><label>Fecha de Nacimiento:</label><br><input type="date" name="fecha_nacimiento" required></div><br>
+    <button type="submit">Guardar Mascota</button>
+</form>
+<br><a href="{{ url_for('clientes.panel_cliente') }}">Volver a mi panel</a>
+{% endblock %}
