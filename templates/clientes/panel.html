@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Mi Panel de Cliente</h2>
+<p>
+    <a href="{{ url_for('clientes.registrar_mascota') }}">+ Registrar Nueva Mascota</a> | 
+    <a href="{{ url_for('turnos.reservar_turno') }}">Reservar Turno</a>
+</p>
+
+<h3>Mis Mascotas</h3>
+{% if cliente.mascotas %}
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr><th>Nombre</th><th>Especie</th><th>Raza</th><th>Fecha Nac.</th></tr>
+        </thead>
+        <tbody>
+        {% for m in cliente.mascotas %}
+            <tr>
+                <td>{{ m.nombre }}</td>
+                <td>{{ m.especie }}</td>
+                <td>{{ m.raza }}</td>
+                <td>{{ m.fecha_nacimiento }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Mis Turnos</h3>
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr><th>Fecha</th><th>Hora</th><th>Mascota</th><th>Motivo</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+        {% for m in cliente.mascotas %}
+            {% for t in m.turnos %}
+            <tr>
+                <td>{{ t.fecha }}</td>
+                <td>{{ t.hora }}</td>
+                <td>{{ m.nombre }}</td>
+                <td>{{ t.motivo }}</td>
+                <td><strong>{{ t.estado }}</strong></td>
+                <td>
+                    {% if t.estado == 'pendiente' %}
+                        <form action="{{ url_for('turnos.cancelar_turno', id_turno=t.id_turno) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Seguro que deseas cancelar este turno?');">Cancelar Turno</button>
+                        </form>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aun no tenes mascotas registradas. Registra una para poder sacar turnos.</p>
+{% endif %}
+{% endblock %}
