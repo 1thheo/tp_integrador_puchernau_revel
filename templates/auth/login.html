@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Iniciar Sesion</h2>
+<form action="{{ url_for('auth.login') }}" method="POST">
+    <div><label>Correo Electronico:</label><br><input type="email" name="email" required></div><br>
+    <div><label>Contrasena:</label><br><input type="password" name="password" required></div><br>
+    <button type="submit">Ingresar</button>
+</form>
+
+<hr>
+<p>O ingresa con tu cuenta de Google:</p>
+<a href="{{ url_for('auth.login_google') }}">
+    <button type="button">Iniciar sesion con Google</button>
+</a>
+
+<p>No tenes cuenta? <a href="{{ url_for('clientes.registrar_cliente') }}">Registrate aca</a></p>
+{% endblock %}

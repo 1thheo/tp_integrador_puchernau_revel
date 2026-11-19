@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenido %}
+<div style="border: 2px solid #d9534f; background-color: #fdf7f7; padding: 20px; border-radius: 6px;">
+    <h2 style="color: #c9302c;">Medios de Contacto y Guardias de Urgencia</h2>
+    <p><strong>Clinica:</strong> {{ info.nombre }}</p>
+    <p><strong>Direccion Fisica:</strong> {{ info.direccion }}</p>
+    <p><strong>Telefono Recepcion:</strong> {{ info.telefono_turnos }}</p>
+    <p style="font-size: 1.1em; color: #c9302c;"><strong>Guardia Urgencias 24hs:</strong> {{ info.whatsapp_guardia }}</p>
+    <p><strong>Horarios de Atencion:</strong> {{ info.horarios }}</p>
+</div>
+{% endblock %}

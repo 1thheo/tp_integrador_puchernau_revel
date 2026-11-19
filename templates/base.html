@@ -2,9 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Veterinaria - Gestión</title>
+    <title>Veterinaria - Sistema de Gestion</title>
 </head>
 <body>
+    <nav style="background: #eee; padding: 10px;">
+        <a href="{{ url_for('publico.contacto_guardias') }}" style="color: #c9302c; font-weight: bold;">Guardias y Contacto</a> |
+        {% if session.get('id_usuario') %}
+            <span>Usuario: <strong>{{ session.get('nombre') }}</strong> ({{ session.get('rol') }})</span> |
+            {% if session.get('rol') == 'Cliente' %}
+                <a href="{{ url_for('clientes.panel_cliente') }}">Mi Panel</a> |
+            {% elif session.get('rol') == 'Veterinario' %}
+                <a href="{{ url_for('veterinaria.agenda_dia') }}">Mi Agenda</a> |
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}">Cerrar Sesion</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Iniciar Sesion</a> |
+            <a href="{{ url_for('clientes.registrar_cliente') }}">Registrarse</a>
+        {% endif %}
+    </nav>
+    <hr>
     {% with mensajes = get_flashed_messages() %}
       {% if mensajes %}
         <ul>
@@ -14,7 +30,6 @@
         </ul>
       {% endif %}
     {% endwith %}
-
     <main>
         {% block contenido %}{% endblock %}
     </main>
