@@ -13,6 +13,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key_vet")
+app.json.ensure_ascii = False
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
