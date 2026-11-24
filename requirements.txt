@@ -3,3 +3,4 @@ flask-sqlalchemy
 Authlib
 requests
 python-dotenv
+gunicorn

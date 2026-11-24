@@ -1,5 +1,6 @@
+import requests
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 from models import db, Cliente, Veterinario, Servicio, Turno
 
 turnos_bp = Blueprint("turnos", __name__, url_prefix="/turnos")
@@ -9,6 +10,19 @@ BLOQUES_HORARIOS = ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00"]
 def es_dia_valido(fecha_str):
     fecha_dt = datetime.strptime(fecha_str, "%Y-%m-%d")
     return fecha_dt.weekday() in [1, 3]
+
+def buscar_feriado(fecha_str):
+    anio = fecha_str[:4]
+    try:
+        respuesta = requests.get(f"https://api.argentinadatos.com/v1/feriados/{anio}", timeout=5)
+        if respuesta.status_code != 200:
+            return None
+        for feriado in respuesta.json():
+            if feriado["fecha"] == fecha_str:
+                return feriado["nombre"]
+    except Exception as e:
+        print("Error consultando la api de feriados:", e)
+    return None
 
 def obtener_cliente_actual():
     id_usuario = session.get("id_usuario")
@@ -31,6 +45,8 @@ def reservar_turno():
     if fecha_seleccionada:
         if not es_dia_valido(fecha_seleccionada):
             flash("La clinica solo atiende turnos los dias Martes y Jueves de 12:00 a 18:00 hs.")
+        elif buscar_feriado(fecha_seleccionada):
+            flash("Ese dia es feriado, la clinica no atiende turnos.")
         else:
             turnos_ocupados = Turno.query.filter(
                 Turno.fecha == fecha_seleccionada,
@@ -51,7 +67,7 @@ def reservar_turno():
             flash("Todos los campos del turno son obligatorios.")
             return redirect(url_for("turnos.reservar_turno", fecha=fecha))
 
-        if not es_dia_valido(fecha) or hora not in BLOQUES_HORARIOS:
+        if not es_dia_valido(fecha) or hora not in BLOQUES_HORARIOS or buscar_feriado(fecha):
             flash("El dia u horario elegido esta fuera de la franja de atencion.")
             return redirect(url_for("turnos.reservar_turno"))
 
@@ -92,6 +108,16 @@ def reservar_turno():
         fecha_seleccionada=fecha_seleccionada,
         horarios_disponibles=horarios_disponibles
     )
+
+@turnos_bp.route("/feriados/<int:anio>")
+def ver_feriados(anio):
+    try:
+        respuesta = requests.get(f"https://api.argentinadatos.com/v1/feriados/{anio}", timeout=5)
+        datos = respuesta.json()
+        feriados = [{"fecha": f["fecha"], "nombre": f["nombre"]} for f in datos]
+        return jsonify(feriados)
+    except Exception as e:
+        return jsonify({"error": f"No se pudo consultar la api de feriados: {e}"}), 500
 
 @turnos_bp.route("/cancelar/<int:id_turno>", methods=["POST"])
 def cancelar_turno(id_turno):
