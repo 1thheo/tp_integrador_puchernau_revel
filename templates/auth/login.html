@@ -1,17 +1,29 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h2>Iniciar Sesion</h2>
-<form action="{{ url_for('auth.login') }}" method="POST">
-    <div><label>Correo Electronico:</label><br><input type="email" name="email" required></div><br>
-    <div><label>Contrasena:</label><br><input type="password" name="password" required></div><br>
-    <button type="submit">Ingresar</button>
-</form>
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Iniciar Sesion</h2>
+                <form action="{{ url_for('auth.login') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electronico</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contrasena</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Ingresar</button>
+                </form>
 
-<hr>
-<p>O ingresa con tu cuenta de Google:</p>
-<a href="{{ url_for('auth.login_google') }}">
-    <button type="button">Iniciar sesion con Google</button>
-</a>
+                <hr>
+                <p class="text-center text-muted">O ingresa con tu cuenta de Google</p>
+                <a href="{{ url_for('auth.login_google') }}" class="btn btn-outline-danger w-100">Iniciar sesion con Google</a>
 
-<p>No tenes cuenta? <a href="{{ url_for('clientes.registrar_cliente') }}">Registrate aca</a></p>
+                <p class="text-center mt-3 mb-0">No tenes cuenta? <a href="{{ url_for('clientes.registrar_cliente') }}">Registrate aca</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

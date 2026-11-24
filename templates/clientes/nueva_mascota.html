@@ -1,21 +1,38 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h2>Registrar Nueva Mascota</h2>
-<form action="{{ url_for('clientes.registrar_mascota') }}" method="POST">
-    <div><label>Nombre de la Mascota:</label><br><input type="text" name="nombre" required></div><br>
-    <div>
-        <label>Especie:</label><br>
-        <select name="especie" required>
-            <option value="">Seleccionar...</option>
-            <option value="Perro">Perro</option>
-            <option value="Gato">Gato</option>
-            <option value="Ave">Ave</option>
-            <option value="Otro">Otro</option>
-        </select>
-    </div><br>
-    <div><label>Raza:</label><br><input type="text" name="raza" required></div><br>
-    <div><label>Fecha de Nacimiento:</label><br><input type="date" name="fecha_nacimiento" required></div><br>
-    <button type="submit">Guardar Mascota</button>
-</form>
-<br><a href="{{ url_for('clientes.panel_cliente') }}">Volver a mi panel</a>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Registrar Nueva Mascota</h2>
+                <form action="{{ url_for('clientes.registrar_mascota') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Mascota</label>
+                        <input type="text" name="nombre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Especie</label>
+                        <select name="especie" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Ave">Ave</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Raza</label>
+                        <input type="text" name="raza" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" name="fecha_nacimiento" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Mascota</button>
+                    <a href="{{ url_for('clientes.panel_cliente') }}" class="btn btn-secondary">Volver a mi panel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

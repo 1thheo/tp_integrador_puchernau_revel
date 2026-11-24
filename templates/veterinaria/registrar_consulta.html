@@ -1,22 +1,26 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h2>Registrar Consulta Medica - Paciente: {{ turno.mascota.nombre }}</h2>
-<p><strong>Dueno:</strong> {{ turno.mascota.dueno.usuario.nombre }} {{ turno.mascota.dueno.usuario.apellido }} | <strong>Motivo:</strong> {{ turno.motivo }}</p>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title">Registrar Consulta Medica - Paciente: {{ turno.mascota.nombre }}</h2>
+        <p><strong>Dueno:</strong> {{ turno.mascota.dueno.usuario.nombre }} {{ turno.mascota.dueno.usuario.apellido }} | <strong>Motivo:</strong> {{ turno.motivo }}</p>
 
-<form action="{{ url_for('veterinaria.registrar_consulta', id_turno=turno.id_turno) }}" method="POST">
-    <div>
-        <label>Diagnostico (Obligatorio):</label><br>
-        <textarea name="diagnostico" rows="4" cols="50" required></textarea>
-    </div><br>
-    <div>
-        <label>Observaciones:</label><br>
-        <textarea name="observaciones" rows="3" cols="50"></textarea>
-    </div><br>
-    <div>
-        <label>Medicacion Recetada:</label><br>
-        <textarea name="medicacion" rows="3" cols="50"></textarea>
-    </div><br>
-    <button type="submit">Guardar Nota y Finalizar Turno</button>
-</form>
-<br><a href="{{ url_for('veterinaria.agenda_dia') }}">Volver a la agenda</a>
+        <form action="{{ url_for('veterinaria.registrar_consulta', id_turno=turno.id_turno) }}" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Diagnostico (Obligatorio)</label>
+                <textarea name="diagnostico" rows="4" class="form-control" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Observaciones</label>
+                <textarea name="observaciones" rows="3" class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Medicacion Recetada</label>
+                <textarea name="medicacion" rows="3" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar Nota y Finalizar Turno</button>
+            <a href="{{ url_for('veterinaria.agenda_dia') }}" class="btn btn-secondary">Volver a la agenda</a>
+        </form>
+    </div>
+</div>
 {% endblock %}

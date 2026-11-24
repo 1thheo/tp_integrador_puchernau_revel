@@ -2,19 +2,22 @@
 {% block contenido %}
 <h2>Historial Clinico (Solo Lectura) - {{ mascota.nombre }}</h2>
 <p><strong>Especie:</strong> {{ mascota.especie }} | <strong>Raza:</strong> {{ mascota.raza }} | <strong>Dueno:</strong> {{ mascota.dueno.usuario.nombre }} {{ mascota.dueno.usuario.apellido }}</p>
-<a href="{{ url_for('veterinaria.agenda_dia') }}">Volver a mi agenda</a>
-<hr>
+<a href="{{ url_for('veterinaria.agenda_dia') }}" class="btn btn-secondary btn-sm mb-3">Volver a mi agenda</a>
 
 {% if registros %}
     {% for r in registros %}
-        <div style="border: 1px solid #999; background: #f9f9f9; padding: 12px; margin-bottom: 12px;">
-            <p><strong>Fecha de Atencion:</strong> {{ r.fecha_registro.strftime('%Y-%m-%d %H:%M') }} | <strong>Profesional:</strong> {{ r.veterinario.usuario.nombre }} {{ r.veterinario.usuario.apellido }} (Mat. {{ r.veterinario.matricula }})</p>
-            <p><strong>Diagnostico:</strong> {{ r.diagnostico }}</p>
-            <p><strong>Observaciones:</strong> {{ r.observaciones or 'Sin observaciones' }}</p>
-            <p><strong>Medicacion Recetada:</strong> {{ r.medicacion or 'Ninguna' }}</p>
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header">
+                <strong>{{ r.fecha_registro.strftime('%Y-%m-%d %H:%M') }}</strong> | {{ r.veterinario.usuario.nombre }} {{ r.veterinario.usuario.apellido }} (Mat. {{ r.veterinario.matricula }})
+            </div>
+            <div class="card-body">
+                <p><strong>Diagnostico:</strong> {{ r.diagnostico }}</p>
+                <p><strong>Observaciones:</strong> {{ r.observaciones or 'Sin observaciones' }}</p>
+                <p class="mb-0"><strong>Medicacion Recetada:</strong> {{ r.medicacion or 'Ninguna' }}</p>
+            </div>
         </div>
     {% endfor %}
 {% else %}
-    <p>El paciente no registra antecedentes clinicos previos.</p>
+    <div class="alert alert-secondary">El paciente no registra antecedentes clinicos previos.</div>
 {% endif %}
 {% endblock %}

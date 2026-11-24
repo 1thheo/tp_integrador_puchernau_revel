@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h2>Mi Panel de Cliente</h2>
-<p>
-    <a href="{{ url_for('clientes.registrar_mascota') }}">+ Registrar Nueva Mascota</a> | 
-    <a href="{{ url_for('turnos.reservar_turno') }}">Reservar Turno</a>
-</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Mi Panel de Cliente</h2>
+    <div>
+        <a href="{{ url_for('clientes.registrar_mascota') }}" class="btn btn-outline-success">+ Registrar Nueva Mascota</a>
+        <a href="{{ url_for('turnos.reservar_turno') }}" class="btn btn-success">Reservar Turno</a>
+    </div>
+</div>
 
 <h3>Mis Mascotas</h3>
 {% if cliente.mascotas %}
-    <table border="1" cellpadding="6">
-        <thead>
+    <table class="table table-striped table-bordered bg-white">
+        <thead class="table-success">
             <tr><th>Nombre</th><th>Especie</th><th>Raza</th><th>Fecha Nac.</th></tr>
         </thead>
         <tbody>
@@ -24,9 +26,9 @@
         </tbody>
     </table>
 
-    <h3>Mis Turnos</h3>
-    <table border="1" cellpadding="6">
-        <thead>
+    <h3 class="mt-4">Mis Turnos</h3>
+    <table class="table table-striped table-bordered bg-white">
+        <thead class="table-success">
             <tr><th>Fecha</th><th>Hora</th><th>Mascota</th><th>Motivo</th><th>Estado</th><th>Acciones</th></tr>
         </thead>
         <tbody>
@@ -37,11 +39,19 @@
                 <td>{{ t.hora }}</td>
                 <td>{{ m.nombre }}</td>
                 <td>{{ t.motivo }}</td>
-                <td><strong>{{ t.estado }}</strong></td>
                 <td>
                     {% if t.estado == 'pendiente' %}
-                        <form action="{{ url_for('turnos.cancelar_turno', id_turno=t.id_turno) }}" method="POST" style="display:inline;">
-                            <button type="submit" onclick="return confirm('Seguro que deseas cancelar este turno?');">Cancelar Turno</button>
+                        <span class="badge bg-warning text-dark">pendiente</span>
+                    {% elif t.estado == 'finalizado' %}
+                        <span class="badge bg-success">finalizado</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ t.estado }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.estado == 'pendiente' %}
+                        <form action="{{ url_for('turnos.cancelar_turno', id_turno=t.id_turno) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Seguro que deseas cancelar este turno?');">Cancelar Turno</button>
                         </form>
                     {% else %}
                         -
@@ -53,6 +63,6 @@
         </tbody>
     </table>
 {% else %}
-    <p>Aun no tenes mascotas registradas. Registra una para poder sacar turnos.</p>
+    <div class="alert alert-secondary">Aun no tenes mascotas registradas. Registra una para poder sacar turnos.</div>
 {% endif %}
 {% endblock %}

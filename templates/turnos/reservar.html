@@ -1,66 +1,75 @@
 {% extends "base.html" %}
 {% block contenido %}
 <h2>Agendar Turno Veterinario</h2>
-<p><em>Atencion clinica: Martes y Jueves de 12:00 a 18:00 hs.</em></p>
+<p class="text-muted"><em>Atencion clinica: Martes y Jueves de 12:00 a 18:00 hs.</em></p>
 
-<form action="{{ url_for('turnos.reservar_turno') }}" method="GET">
-    <label>Seleccionar Fecha:</label>
-    <input type="date" name="fecha" value="{{ fecha_seleccionada }}" required>
-    <button type="submit">Ver Horarios Disponibles</button>
+<form action="{{ url_for('turnos.reservar_turno') }}" method="GET" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label class="form-label">Seleccionar Fecha</label>
+        <input type="date" name="fecha" value="{{ fecha_seleccionada }}" class="form-control" required>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-success">Ver Horarios Disponibles</button>
+    </div>
 </form>
-<hr>
 
 {% if fecha_seleccionada %}
     {% if horarios_disponibles %}
-        <form action="{{ url_for('turnos.reservar_turno', fecha=fecha_seleccionada) }}" method="POST">
-            <input type="hidden" name="fecha" value="{{ fecha_seleccionada }}">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form action="{{ url_for('turnos.reservar_turno', fecha=fecha_seleccionada) }}" method="POST">
+                    <input type="hidden" name="fecha" value="{{ fecha_seleccionada }}">
 
-            <div>
-                <label>Horario Disponible ({{ fecha_seleccionada }}):</label><br>
-                <select name="hora" required>
-                    {% for h in horarios_disponibles %}
-                        <option value="{{ h }}">{{ h }} hs</option>
-                    {% endfor %}
-                </select>
-            </div><br>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Horario Disponible ({{ fecha_seleccionada }})</label>
+                            <select name="hora" class="form-select" required>
+                                {% for h in horarios_disponibles %}
+                                    <option value="{{ h }}">{{ h }} hs</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-            <div>
-                <label>Mascota:</label><br>
-                <select name="id_mascota" required>
-                    {% for m in mascotas %}
-                        <option value="{{ m.id_mascota }}">{{ m.nombre }} ({{ m.especie }})</option>
-                    {% endfor %}
-                </select>
-            </div><br>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mascota</label>
+                            <select name="id_mascota" class="form-select" required>
+                                {% for m in mascotas %}
+                                    <option value="{{ m.id_mascota }}">{{ m.nombre }} ({{ m.especie }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-            <div>
-                <label>Veterinario:</label><br>
-                <select name="id_veterinario" required>
-                    {% for v in veterinarios %}
-                        <option value="{{ v.id_veterinario }}">{{ v.usuario.nombre }} {{ v.usuario.apellido }} ({{ v.matricula }})</option>
-                    {% endfor %}
-                </select>
-            </div><br>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Veterinario</label>
+                            <select name="id_veterinario" class="form-select" required>
+                                {% for v in veterinarios %}
+                                    <option value="{{ v.id_veterinario }}">{{ v.usuario.nombre }} {{ v.usuario.apellido }} ({{ v.matricula }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-            <div>
-                <label>Servicio:</label><br>
-                <select name="id_servicio" required>
-                    {% for s in servicios %}
-                        <option value="{{ s.id_servicio }}">{{ s.nombre }} (${{ s.precio }})</option>
-                    {% endfor %}
-                </select>
-            </div><br>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Servicio</label>
+                            <select name="id_servicio" class="form-select" required>
+                                {% for s in servicios %}
+                                    <option value="{{ s.id_servicio }}">{{ s.nombre }} (${{ s.precio }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
 
-            <div>
-                <label>Motivo de la consulta:</label><br>
-                <input type="text" name="motivo" required>
-            </div><br>
+                    <div class="mb-3">
+                        <label class="form-label">Motivo de la consulta</label>
+                        <input type="text" name="motivo" class="form-control" required>
+                    </div>
 
-            <button type="submit">Confirmar Reserva</button>
-        </form>
+                    <button type="submit" class="btn btn-success">Confirmar Reserva</button>
+                </form>
+            </div>
+        </div>
     {% else %}
-        <p>No hay horarios disponibles para la fecha seleccionada.</p>
+        <div class="alert alert-warning">No hay horarios disponibles para la fecha seleccionada.</div>
     {% endif %}
 {% endif %}
-<br><a href="{{ url_for('clientes.panel_cliente') }}">Volver a mi panel</a>
+<a href="{{ url_for('clientes.panel_cliente') }}" class="btn btn-secondary mt-3">Volver a mi panel</a>
 {% endblock %}
